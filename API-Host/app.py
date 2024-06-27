@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 import mariadb
-import time
+import os
 
 app = Flask(__name__)
 
@@ -9,11 +9,11 @@ def submit():
     try:
         # create new connection
         conn = mariadb.connect(
-            user="sebi",
-            password="changeme",
-            host="msqldb",
+            user=os.getenv('DB_USER', 'default'),
+            password=os.getenv('DB_PASSWORD', 'default'),
+            host=os.getenv('DB_HOST', 'mysqldb'),
             port=3306,
-            database="quotes"
+            database=os.getenv('DB_DATABASE', 'quotes')
         )
         # create new cursor, and querry DB for a random quote
         cur = conn.cursor()
