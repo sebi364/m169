@@ -30,5 +30,9 @@ def submit():
     except:
         return jsonify("DB Error!"), 500
 
+@app.route('/health', methods=['GET'])
+def submit():
+    return("ok", 200)
+
 if __name__ == '__main__':
     app.run(port=5000, host='0.0.0.0')
