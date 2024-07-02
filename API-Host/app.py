@@ -31,7 +31,7 @@ def submit():
         return jsonify("DB Error!"), 500
 
 @app.route('/health', methods=['GET'])
-def submit():
+def health():
     return("ok", 200)
 
 if __name__ == '__main__':
