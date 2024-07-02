@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
 import mariadb
 import os
+import uuid
 
 app = Flask(__name__)
+uuid = uuid.uuid4().hex
 
 @app.route('/api/quote', methods=['GET'])
 def submit():
@@ -33,6 +35,10 @@ def submit():
 @app.route('/health', methods=['GET'])
 def health():
     return("ok", 200)
+
+@app.route('/uuid', methods=['GET'])
+def health():
+    return(uuid, 200)
 
 if __name__ == '__main__':
     app.run(port=5000, host='0.0.0.0')
