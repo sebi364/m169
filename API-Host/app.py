@@ -37,7 +37,7 @@ def health():
     return("ok", 200)
 
 @app.route('/uuid', methods=['GET'])
-def health():
+def heaget_uuid():
     return(uuid, 200)
 
 if __name__ == '__main__':
