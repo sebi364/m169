@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: mariadb
-        image: mariadb:latest
+        image: ghcr.io/sebi364/database:latest
         env:
         - name: MYSQL_DATABASE
           valueFrom:
@@ -68,8 +68,6 @@ spec:
         volumeMounts:
         - name: mariadb-storage
           mountPath: /var/lib/mysql
-        - name: mysql-initdb
-          mountPath: /docker-entrypoint-initdb.d
 
       volumes:
       - name: mariadb-storage
