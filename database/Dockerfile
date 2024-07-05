@@ -1,7 +1,5 @@
 # Dockerfile for MySQL with init script
-FROM mysql:latest
+FROM mariadb:latest
 
 # Copy the SQL file into the image
-COPY mysql-initdb-config.yml /docker-entrypoint-initdb.d/init.sql
-
-
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
