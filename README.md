@@ -6,6 +6,8 @@ This repository contains the sourcefiles and container-images for our m169 proje
 
 ## Tl:Dr;
 
+We developed a simple Flask app that serves random quotes in form of a simple JSON API. With routes for quotes, health, and UUIDs. The app uses a MariaDB database running in a Docker container. We automated the CI/CD pipeline with GitHub Actions. The K3s cluster is hosted on Proxmox and configured using Terraform. Data storage is managed with Longhorn to ensure replication and persistence.
+
 ## Deployment
 This project can be deployed to an existing K3s cluster using the following commands:
 ```bash
