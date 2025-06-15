@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}-app
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}-app
+    spec:
+      containers:
+        - name: {{ .Values.name }}-app
+          image: ghcr.io/sebi364/webapp:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: {{ .Values.db.host | default "quotes-db" }}
+            - name: DB_DATABASE
+              value: {{ .Values.db.database | default "quotes" }}
+            - name: DB_USER
+              value: {{ .Values.db.user | default "backend" }}
+            - name: DB_PASSWORD
+              value: {{ .Values.db.password | default "changeme" }}
+            

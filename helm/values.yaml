@@ -1,0 +1,19 @@
+---
+name: quotes-api
+namespace: default
+host: quotes-api.example.com
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+tls:
+  secretName: quotes-api-tls
+backend:
+  replicas: 3
+db:
+  host: quotes-db
+  database: quotes
+  user: backend
+  password: changeme
