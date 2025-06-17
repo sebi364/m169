@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import mariadb
 import os
 import uuid
@@ -7,7 +7,7 @@ app = Flask(__name__)
 uuid = uuid.uuid4().hex
 
 @app.route('/api/quote', methods=['GET'])
-def submit():
+def get_quote():
     try:
         # create new connection
         conn = mariadb.connect(
@@ -31,6 +31,30 @@ def submit():
             return jsonify({})
     except:
         return jsonify("DB Error!"), 500
+
+@app.route('/api/quote', methods=['POST'])
+def submit_quote():
+    data = request.get_json()
+    quote = data.get('quote')
+    author = data.get('author')
+
+    if not quote or not author:
+        return jsonify({"error": "Both 'quote' and 'author' are required."}), 400
+
+    try:
+        conn = mariadb.connect(
+            user=os.getenv('DB_USER', 'default'),
+            password=os.getenv('DB_PASSWORD', 'default'),
+            host=os.getenv('DB_HOST', 'mysqldb'),
+            port=3306,
+            database=os.getenv('DB_DATABASE', 'quotes')
+        )
+        cur = conn.cursor()
+        cur.execute("INSERT INTO quotes (quote, author) VALUES (?, ?)", (quote, author))
+        conn.commit()
+        return jsonify({"message": "Quote added successfully."}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/health', methods=['GET'])
 def health():
