@@ -1,10 +1,10 @@
 ---
-name: quotes-api
-namespace: default
 host: quotes-api.example.com
 ingress:
   enabled: true
   className: nginx
+  path: /
+  pathType: Prefix
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: letsencrypt-prod

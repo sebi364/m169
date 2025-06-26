@@ -2,20 +2,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}-app
-  namespace: {{ .Values.namespace }}
+  labels:
+    helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+    app.kubernetes.io/name: {{ default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ printf "%s-%s" .Release.Name (default .Chart.Name .Values.nameOverride) | trunc 63 | trimSuffix "-" }}-app
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.backend.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.name }}-app
+      app.kubernetes.io/name: {{ default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: webapp
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}-app
+        app.kubernetes.io/name: {{ default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: webapp
     spec:
       containers:
-        - name: {{ .Values.name }}-app
+        - name: {{ default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}-app
           image: ghcr.io/sebi364/webapp:latest
           ports:
             - containerPort: 5000
@@ -28,4 +40,3 @@ spec:
               value: {{ .Values.db.user | default "backend" }}
             - name: DB_PASSWORD
               value: {{ .Values.db.password | default "changeme" }}
-            
